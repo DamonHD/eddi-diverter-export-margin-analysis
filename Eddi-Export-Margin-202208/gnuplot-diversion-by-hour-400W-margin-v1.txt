@@ -1,0 +1,72 @@
+# Plot 16WW modelled DHW diversion per hour for selected months.
+# Plot various variants and sizes, including a hero image banner.
+# Intended to be run in directory with output from model run.
+
+# Input of form:
+# ## YEARSTOUSE 2019 2020 2021
+# ## MAXDIVERTW 3000
+# ## DHWWhPERDAY 4000
+# ## STOREMAXWh 7000
+# ## MARGINW 400
+# #h   06   09   12
+# 00    0    0    0
+# 01    0    0    0
+# 02    0    0    0
+# 03    0    0    0
+# 04    0    0    0
+# 05   18    0    0
+# 06  130    1    0
+
+
+# FIGURE FOR DESKTOP, LINEAR SCALE, x1 PIXEL DENSITY
+# 720x540 is same aspect ratio as 640x480, but scaled for EOU www figure.
+#set terminal png small size 720,540
+set terminal png size 720,540
+# 'raw' image should probably be converted with eg zopflipng.
+set output "diversion-by-hour-400W-margin-720w.raw.png"
+set title "16WW Modelled Diversion By Hour for Selected Months"
+#set key off
+#set key outside
+#set key right
+#set key box
+#set lmargin 1.5
+#set lmargin 0
+#set rmargin 13.5
+#set tmargin 0.5
+#set bmargin 1.5
+#set grid xtics y2tics
+#set border 0
+set xrange [0:23]
+set yrange [0:]
+#set xtics rotate
+set format y "%gW"
+set format x "%2gh"
+#set noytics
+#unset autoscale y
+#set y2tics
+#set format y2 "%gW"
+#set tics scale 3
+plot "diversion-by-hour.txt" \
+       using 1:4 title "Dec" smooth csplines lw 1 lc 1, \
+    "" using 1:4 notitle with points lc 1, \
+    "" using 1:3 title "Sep" smooth csplines lw 1 lc 2, \
+    "" using 1:3 notitle with points lc 2, \
+    "" using 1:2 title "Jun" smooth csplines lw 3 lc 3, \
+    "" using 1:2 notitle with points lc 3
+
+# Hero image banner.
+# 800x200 to use as is, visually simplified for small file size.
+set terminal png size 800,200
+set output "diversion-by-hour-400W-margin-banner-800w.raw.png"
+unset title
+unset grid
+unset border
+set key off
+unset yrange
+set noytics
+set noxtics
+plot "diversion-by-hour.txt" \
+       using 1:4 notitle smooth csplines lw 1 lc 1, \
+    "" using 1:3 notitle smooth csplines lw 1 lc 2, \
+    "" using 1:2 notitle smooth csplines lw 3 lc 3
+
